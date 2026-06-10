@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Inner Ascent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --obsidian:  #0A0A0F;
+      --gold:      #C9A84C;
+      --gold-dim:  #8A6F2E;
+      --ivory:     #EDE8DC;
+      --slate:     #3B3D52;
+      --crimson:   #7A2535;
+      --mist:      #1A1A26;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--obsidian);
+      color: var(--ivory);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(10,10,15,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+    .nav-links a {
+      color: var(--ivory);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      transition: opacity 0.3s, color 0.3s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Ascent Line — the signature element */
+    .ascent-line {
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        var(--gold-dim) 20%,
+        var(--gold) 50%,
+        var(--gold-dim) 80%,
+        transparent 100%
+      );
+      transform: translateX(-50%);
+      animation: lineBreath 4s ease-in-out infinite;
+    }
+    @keyframes lineBreath {
+      0%, 100% { opacity: 0.35; }
+      50%       { opacity: 0.85; }
+    }
+
+    /* Radial glow behind hero text */
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 0 2rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 1.8rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garant', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--ivory);
+      margin-bottom: 0.3rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garant', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ivory);
+      opacity: 0.55;
+      margin-top: 1.4rem;
+      margin-bottom: 3rem;
+      letter-spacing: 0.04em;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--obsidian);
+    }
+
+    /* ── DISCIPLINES INTRO ── */
+    .disciplines-strip {
+      display: flex;
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .discipline-tab {
+      flex: 1;
+      padding: 1.6rem 1rem;
+      text-align: center;
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--ivory);
+      opacity: 0.45;
+      border-right: 1px solid rgba(201,168,76,0.15);
+      cursor: pointer;
+      transition: opacity 0.3s, background 0.3s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .discipline-tab:last-child { border-right: none; }
+    .discipline-tab:hover { opacity: 1; background: rgba(201,168,76,0.04); }
+    .discipline-tab .tab-icon {
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+
+    /* ── SECTION COMMON ── */
+    .section {
+      padding: 7rem 0;
+    }
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem;
+    }
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 0.8rem;
+    }
+    .section-heading {
+      font-family: 'Cormorant Garant', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--ivory);
+      margin-bottom: 1.5rem;
+    }
+    .section-heading em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .section-body {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--ivory);
+      opacity: 0.6;
+      max-width: 560px;
+    }
+
+    /* ── PHILOSOPHY ── */
+    #philosophy { background: var(--obsidian); }
+    .phil-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .quote-block {
+      border-left: 2px solid var(--gold);
+      padding-left: 2rem;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.55rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--ivory);
+      opacity: 0.85;
+      margin-bottom: 1rem;
+    }
+    .quote-attr {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* Thought cards */
+    .thought-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 3rem;
+    }
+    .thought-card {
+      background: var(--mist);
+      padding: 1.6rem 2rem;
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .thought-card:hover { background: rgba(201,168,76,0.04); }
+    .thought-card-num {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.25;
+      line-height: 1;
+      min-width: 2rem;
+    }
+    .thought-card-text {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--ivory);
+      opacity: 0.75;
+    }
+
+    /* ── ART ── */
+    #art { background: var(--mist); }
+    .art-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 260px 260px;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .art-tile {
+      position: relative;
+      overflow: hidden;
+      background: var(--slate);
+      cursor: pointer;
+    }
+    .art-tile:first-child { grid-row: span 2; }
+    .art-tile-inner {
+      width: 100%; height: 100%;
+      display: flex; align-items: flex-end;
+      padding: 1.5rem;
+    }
+    .art-tile-label {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--ivory);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .art-tile:hover .art-tile-label { opacity: 1; }
+
+    /* Painted fills for art tiles */
+    .art-tile:nth-child(1) { background: linear-gradient(135deg, #1C1A2E 0%, #3B2540 60%, #5C3060 100%); }
+    .art-tile:nth-child(2) { background: linear-gradient(135deg, #2A1F14 0%, #4A3020 100%); }
+    .art-tile:nth-child(3) { background: linear-gradient(135deg, #0F1A1C 0%, #1E3A35 100%); }
+    .art-tile:nth-child(4) { background: linear-gradient(135deg, #1A0F0F 0%, #3A1A1A 100%); }
+    .art-tile:nth-child(5) { background: linear-gradient(135deg, #12181F 0%, #2A3550 100%); }
+
+    /* ── CINEMA ── */
+    #cinema { background: var(--obsidian); }
+    .cinema-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .film-list {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .film-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(237,232,220,0.08);
+      cursor: pointer;
+      transition: padding-left 0.3s;
+    }
+    .film-item:hover { padding-left: 0.6rem; }
+    .film-title {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--ivory);
+      flex: 1;
+    }
+    .film-year {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+    .film-director {
+      font-size: 0.7rem;
+      color: var(--ivory);
+      opacity: 0.35;
+      min-width: 100px;
+      text-align: right;
+    }
+    .cinema-aside {
+      padding-top: 1rem;
+    }
+    .cinema-poster-mock {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(160deg, #1a0a0a 0%, #2d1a30 40%, #0a1a2d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cinema-poster-text {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 2.5rem;
+      font-style: italic;
+      color: rgba(201,168,76,0.3);
+      text-align: center;
+      padding: 2rem;
+      line-height: 1.3;
+    }
+    .cinema-poster-mock::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(201,168,76,0.12);
+    }
+
+    /* ── MUSIC ── */
+    #music { background: var(--mist); }
+    .music-layout { }
+    .music-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+    }
+    .music-tracks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201,168,76,0.08);
+    }
+    .track-cell {
+      background: var(--mist);
+      padding: 2.5rem 2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .track-cell:hover { background: rgba(201,168,76,0.05); }
+    .track-genre {
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 0.7rem;
+    }
+    .track-name {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      color: var(--ivory);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .track-artist {
+      font-size: 0.72rem;
+      color: var(--ivory);
+      opacity: 0.4;
+    }
+    .track-play {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 0.7rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .track-cell:hover .track-play { opacity: 1; }
+
+    /* ── MANIFESTO ── */
+    #manifesto {
+      background: var(--obsidian);
+      padding: 9rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #manifesto::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.2) 30%, rgba(201,168,76,0.2) 70%, transparent);
+      transform: translateX(-50%);
+    }
+    .manifesto-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 4rem;
+      position: relative;
+      z-index: 1;
+    }
+    .manifesto-title {
+      font-family: 'Cormorant Garant', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--ivory);
+      margin-bottom: 2.5rem;
+    }
+    .manifesto-title em { font-style: italic; color: var(--gold); }
+    .manifesto-body {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      line-height: 1.9;
+      color: var(--ivory);
+      opacity: 0.6;
+      margin-bottom: 3rem;
+    }
+    .manifesto-join {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: var(--gold);
+      color: var(--obsidian);
+      text-decoration: none;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    .manifesto-join:hover { opacity: 0.85; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 4rem;
+      border-top: 1px solid rgba(201,168,76,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+    .footer-note {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--ivory);
+      opacity: 0.25;
+    }
+
+    /* ── SCROLL FADE-IN ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .section-inner { padding: 0 1.5rem; }
+      .phil-layout, .cinema-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .art-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .art-tile:first-child { grid-row: span 1; }
+      .music-tracks { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .disciplines-strip { flex-wrap: wrap; }
+      .discipline-tab { flex: 1 0 50%; border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ascent-line { animation: none; opacity: 0.4; }
+      .fade-up { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">The Inner Ascent</span>
+    <ul class="nav-links">
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#art">Art</a></li>
+      <li><a href="#cinema">Cinema</a></li>
+      <li><a href="#music">Music</a></li>
+      <li><a href="#manifesto">Manifesto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="ascent-line"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">A journal of the examined life</p>
+      <h1 class="hero-title">The Inner<br><em>Ascent</em></h1>
+      <p class="hero-subtitle">Where thought becomes form,<br>and form becomes feeling.</p>
+      <a href="#philosophy" class="hero-cta">Begin the Ascent</a>
+    </div>
+  </section>
+
+  <!-- DISCIPLINES STRIP -->
+  <div class="disciplines-strip">
+    <a href="#philosophy" class="discipline-tab">
+      <span class="tab-icon">⚗</span>
+      Philosophy
+    </a>
+    <a href="#art" class="discipline-tab">
+      <span class="tab-icon">◈</span>
+      Art
+    </a>
+    <a href="#cinema" class="discipline-tab">
+      <span class="tab-icon">◎</span>
+      Cinema
+    </a>
+    <a href="#music" class="discipline-tab">
+      <span class="tab-icon">♩</span>
+      Music
+    </a>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <section id="philosophy" class="section">
+    <div class="section-inner">
+      <div class="phil-layout fade-up">
+        <div>
+          <p class="section-label">Philosophy</p>
+          <h2 class="section-heading">The examined<br>life, <em>revisited</em></h2>
+          <p class="section-body">Philosophy at The Inner Ascent is not a discipline confined to lecture halls. It is a living practice — the art of questioning what you already believe, and sitting with the discomfort of not yet knowing.</p>
+
+          <div class="thought-cards" style="margin-top: 3rem;">
+            <div class="thought-card">
+              <span class="thought-card-num">I</span>
+              <p class="thought-card-text">On Solitude and the Self — How aloneness becomes a site of clarity rather than absence.</p>
+            </div>
+            <div class="thought-card">
+              <span class="thought-card-num">II</span>
+              <p class="thought-card-text">The Ethics of Looking — What we owe to beauty, and what beauty demands of us.</p>
+            </div>
+            <div class="thought-card">
+              <span class="thought-card-num">III</span>
+              <p class="thought-card-text">Consciousness Without Ground — Navigating existence when the foundations refuse to hold still.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="quote-block">
+          <p class="quote-text">"To live is to choose. But to choose well, one must know who one is and what one cares for."</p>
+          <p class="quote-attr">— Jean-Paul Sartre</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ART -->
+  <section id="art" class="section">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">Art</p>
+        <h2 class="section-heading">Seeing as<br>an act of <em>devotion</em></h2>
+        <p class="section-body">Art is not decoration but interrogation. A surface that reflects back the depths you carry inside — if you are willing to look long enough.</p>
+      </div>
+
+      <div class="art-grid fade-up" style="transition-delay: 0.15s;">
+        <div class="art-tile">
+          <div class="art-tile-inner">
+            <span class="art-tile-label">The Sublime Interior</span>
+          </div>
+        </div>
+        <div class="art-tile">
+          <div class="art-tile-inner">
+            <span class="art-tile-label">Threshold Series</span>
+          </div>
+        </div>
+        <div class="art-tile">
+          <div class="art-tile-inner">
+            <span class="art-tile-label">Void & Form</span>
+          </div>
+        </div>
+        <div class="art-tile">
+          <div class="art-tile-inner">
+            <span class="art-tile-label">Embers</span>
+          </div>
+        </div>
+        <div class="art-tile">
+          <div class="art-tile-inner">
+            <span class="art-tile-label">Blue Meridian</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CINEMA -->
+  <section id="cinema" class="section">
+    <div class="section-inner">
+      <div class="cinema-layout fade-up">
+        <div>
+          <p class="section-label">Cinema</p>
+          <h2 class="section-heading">Films that<br><em>linger</em> past midnight</h2>
+          <p class="section-body">The films we return to are not the ones with answers. They are the ones that leave an open wound — a question you carry home from the dark theatre and live with for years.</p>
+
+          <div class="film-list">
+            <div class="film-item">
+              <span class="film-title">Stalker</span>
+              <span class="film-year">1979</span>
+              <span class="film-director">Tarkovsky</span>
+            </div>
+            <div class="film-item">
+              <span class="film-title">The Tree of Life</span>
+              <span class="film-year">2011</span>
+              <span class="film-director">Malick</span>
+            </div>
+            <div class="film-item">
+              <span class="film-title">In the Mood for Love</span>
+              <span class="film-year">2000</span>
+              <span class="film-director">Wong Kar-wai</span>
+            </div>
+            <div class="film-item">
+              <span class="film-title">Persona</span>
+              <span class="film-year">1966</span>
+              <span class="film-director">Bergman</span>
+            </div>
+            <div class="film-item">
+              <span class="film-title">L'Avventura</span>
+              <span class="film-year">1960</span>
+              <span class="film-director">Antonioni</span>
+            </div>
+            <div class="film-item">
+              <span class="film-title">Yi Yi</span>
+              <span class="film-year">2000</span>
+              <span class="film-director">Edward Yang</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cinema-aside">
+          <div class="cinema-poster-mock">
+            <p class="cinema-poster-text">Every frame<br>a confession</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section id="music" class="section">
+    <div class="section-inner">
+      <div class="music-header fade-up">
+        <div>
+          <p class="section-label">Music</p>
+          <h2 class="section-heading">Sound as<br><em>philosophy</em></h2>
+          <p class="section-body">Music does what language cannot: it carries feeling without naming it, and delivers it directly to wherever you live inside yourself.</p>
+        </div>
+      </div>
+
+      <div class="music-tracks fade-up" style="transition-delay: 0.2s;">
+        <div class="track-cell">
+          <p class="track-genre">Ambient</p>
+          <p class="track-name">Music for Airports</p>
+          <p class="track-artist">Brian Eno</p>
+          <div class="track-play">▶</div>
+        </div>
+        <div class="track-cell">
+          <p class="track-genre">Contemporary Classical</p>
+          <p class="track-name">Spiegel im Spiegel</p>
+          <p class="track-artist">Arvo Pärt</p>
+          <div class="track-play">▶</div>
+        </div>
+        <div class="track-cell">
+          <p class="track-genre">Jazz</p>
+          <p class="track-name">A Love Supreme</p>
+          <p class="track-artist">John Coltrane</p>
+          <div class="track-play">▶</div>
+        </div>
+        <div class="track-cell">
+          <p class="track-genre">Drone</p>
+          <p class="track-name">For Long October</p>
+          <p class="track-artist">Stars of the Lid</p>
+          <div class="track-play">▶</div>
+        </div>
+        <div class="track-cell">
+          <p class="track-genre">Post-Classical</p>
+          <p class="track-name">Nuvole Bianche</p>
+          <p class="track-artist">Ludovico Einaudi</p>
+          <div class="track-play">▶</div>
+        </div>
+        <div class="track-cell">
+          <p class="track-genre">Sacred</p>
+          <p class="track-name">Canto Ostinato</p>
+          <p class="track-artist">Simeon ten Holt</p>
+          <div class="track-play">▶</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section id="manifesto">
+    <div class="manifesto-inner fade-up">
+      <h2 class="manifesto-title">We believe the <em>interior life</em><br>is worth cultivating.</h2>
+      <p class="manifesto-body">The Inner Ascent exists for those who suspect there is more going on — in a painting, in a chord, in a well-turned sentence — than first appears. We are not a publication. We are a posture: toward attention, toward depth, toward the vertigo of genuine encounter with the world's strangeness.</p>
+      <a href="#" class="manifesto-join">Join the Ascent</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">The Inner Ascent</span>
+    <span class="footer-note">Philosophy · Art · Cinema · Music</span>
+  </footer>
+
+  <script>
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
